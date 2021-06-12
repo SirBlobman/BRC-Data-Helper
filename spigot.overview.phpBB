@@ -1,0 +1,83 @@
+[SIZE=5][COLOR=#FF0000][B]Supported Spigot Versions:[/B][/COLOR][/SIZE]
+1.17
+
+[SIZE=5][COLOR=#FF0000][B]Description:[/B][/COLOR][/SIZE]
+This plugin helps convert BRC plugin data into readable json.
+
+[SIZE=5][COLOR=#FF0000][B]Requirements:[/B][/COLOR][/SIZE]
+[LIST]
+[*][URL='https://www.spigotmc.org/resources/6515/']ShopGUIPlus[/URL] v1.59.0 or higher.
+[*][URL='https://www.spigotmc.org/resources/37707/']PlayerShopGUIPlus[/URL] v1.16.0 or higher.
+[*][URL='https://www.spigotmc.org/resources/83189/']SirBlobmanCore[/URL] v2.0.6-Dev or higher.
+[*]A fully functioning MySQL MariaDB database previously linked to PlayerShopGUIPlus.
+[/LIST]
+
+[SIZE=5][COLOR=#FF0000][B]Features:[/B][/COLOR][/SIZE]
+[LIST]
+[*]Convert original PlayerShopGUIPlus database with base64-binary items into a different table as json items.
+[*]Purchase history table that stores information when players buy items from other players.
+[*]Creation history table that stores information when players add items to their own shop.
+[*]Transaction history table for ShopGUIPlus when players sell or buy items.
+[I]Please send me suggestions for new features or feature changes.[/I]
+[/LIST]
+
+[SIZE=5][COLOR=#FF0000][B]Screenshots:[/B][/COLOR][/SIZE]
+This plugin was requested and tested by LoVeC119. Click the spoiler below to see some example tables:
+[SPOILER='Example Tables']
+[B]PSG+ Converted Table:[/B]
+[IMG]https://i.imgur.com/5YSbTLu.png[/IMG]
+[B]PSG+ Purchase History Table:[/B]
+[IMG]https://i.imgur.com/T4jvuQ2.png[/IMG]
+[B]PSG+ Add Item History Table:[/B]
+[IMG]https://i.imgur.com/sWfW5qR.png[/IMG]
+[B]SG+ Transaction History Table:[/B]
+[IMG]https://i.imgur.com/7wXu0iK.png[/IMG]
+[/SPOILER]
+
+[SIZE=5][COLOR=#FF0000][B]Default Configuration:[/B][/COLOR][/SIZE]
+Click the spoiler below to see the default configuration file.
+[SPOILER='Default Configuration File']
+[CODE=YAML]
+# DO NOT CHANGE THIS VALUE
+generated-by-version: "1.0.0-Beta"
+
+# Toggle option for debug mode. Only set this to true if requested by SirBlobman
+debug-mode: false
+
+# How often (in ticks) will data be sent to the database?
+# Default: 6,000 ticks ~= 5 minutes
+data-sync-period: 6000
+
+# Connection settings for the MySQL Database
+database:
+  host: "localhost"
+  port: 3306
+  database: "minecraft"
+  username: "root"
+  password: ""
+
+tables:
+  # The original table that is made by PlayerShopGUIPlus
+  psgp-original: "psgp_original"
+
+  # The converted data from the original table
+  psgp-converted: "psgp_converted"
+
+  # Log for when players buy items from other players
+  psgp-purchase-history: "psgp_purchase_history"
+
+  # Log for when players add items to their shop
+  psgp-creation: "psgp_creation_history"
+
+  # Log for when players buy items from the admin shop (ShopGUIPlus)
+  sgp-transaction-history: "sgp_transaction_history"
+[/CODE]
+[/SPOILER]
+
+
+[SIZE=5][B][COLOR=#FF0000]Support:[/COLOR][/B][/SIZE]
+If you need a feature added or are having issues, please join my discord by clicking the image below:
+[URL='https://discord.gg/XMq2agT'][IMG]https://discordapp.com/assets/fc0b01fe10a0b8c602fb0106d8189d9b.png[/IMG][/URL]
+
+[SIZE=5][B][COLOR=#FF0000]Extra Information:[/COLOR][/B][/SIZE]
+Please DO NOT leave bugs or error logs as reviews.

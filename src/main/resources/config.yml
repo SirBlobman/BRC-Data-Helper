@@ -1,0 +1,33 @@
+# DO NOT CHANGE THIS VALUE
+generated-by-version: "${bukkit.plugin.version}"
+
+# Toggle option for debug mode. Only set this to true if requested by SirBlobman
+debug-mode: false
+
+# How often (in ticks) will data be sent to the database?
+# Default: 6,000 ticks ~= 5 minutes
+data-sync-period: 6000
+
+# Connection settings for the MySQL Database
+database:
+  host: "localhost"
+  port: 3306
+  database: "minecraft"
+  username: "root"
+  password: ""
+
+tables:
+  # The original table that is made by PlayerShopGUIPlus
+  psgp-original: "psgp_original"
+
+  # The converted data from the original table
+  psgp-converted: "psgp_converted"
+
+  # Log for when players buy items from other players
+  psgp-purchase-history: "psgp_purchase_history"
+
+  # Log for when players add items to their shop
+  psgp-creation: "psgp_creation_history"
+
+  # Log for when players buy items from the admin shop (ShopGUIPlus)
+  sgp-transaction-history: "sgp_transaction_history"

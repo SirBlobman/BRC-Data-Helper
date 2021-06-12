@@ -1,0 +1,20 @@
+name: "${bukkit.plugin.name}"
+prefix: "${bukkit.plugin.prefix}"
+description: "${bukkit.plugin.description}"
+website: "https://www.sirblobman.xyz/"
+
+main: "${bukkit.plugin.main}"
+version: "${bukkit.plugin.version}"
+api-version: "1.16"
+
+authors:
+  - "SirBlobman"
+
+depend:
+  - "PlayerShopGUIPlus"
+  - "ShopGUIPlus"
+  - "SirBlobmanCore"
+
+libraries:
+  - "org.mariadb.jdbc:mariadb-java-client:2.7.2"
+  - "com.zaxxer:HikariCP:4.0.3"
