@@ -1,28 +1,15 @@
 package xyz.sirblobman.paid.brc.data.helper.listener;
 
 import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import com.github.sirblobman.api.utility.Validate;
+import com.github.sirblobman.api.core.listener.PluginListener;
 import xyz.sirblobman.paid.brc.data.helper.DataHelperPlugin;
 import xyz.sirblobman.paid.brc.data.helper.manager.MySQLDataManager;
 
-abstract class DataListener implements Listener {
-    private final DataHelperPlugin plugin;
+abstract class DataListener extends PluginListener<DataHelperPlugin> {
     DataListener(DataHelperPlugin plugin) {
-        this.plugin = Validate.notNull(plugin, "plugin must not be null!");
-    }
-
-    public void register() {
-        DataHelperPlugin plugin = getPlugin();
-        PluginManager pluginManager = Bukkit.getPluginManager();
-        pluginManager.registerEvents(this, plugin);
-    }
-
-    protected final DataHelperPlugin getPlugin() {
-        return this.plugin;
+        super(plugin);
     }
 
     protected final MySQLDataManager getDataManager() {

@@ -37,6 +37,7 @@ import org.mariadb.jdbc.MariaDbPoolDataSource;
 public final class MySQLDataManager extends BukkitRunnable {
     private final DataHelperPlugin plugin;
     private final MariaDbPoolDataSource dataSource;
+
     public MySQLDataManager(DataHelperPlugin plugin) {
         this.plugin = Validate.notNull(plugin, "plugin must not be null!");
         this.dataSource = new MariaDbPoolDataSource();
