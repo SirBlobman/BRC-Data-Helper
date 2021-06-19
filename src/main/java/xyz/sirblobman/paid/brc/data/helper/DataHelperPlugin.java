@@ -48,7 +48,9 @@ public final class DataHelperPlugin extends ConfigurablePlugin {
 
     @Override
     public void onDisable() {
-        if(!this.enabledSuccessfully) return;
+        if(!this.enabledSuccessfully) {
+            return;
+        }
 
         if(!this.dataManager.isCancelled()) {
             this.dataManager.cancel();
