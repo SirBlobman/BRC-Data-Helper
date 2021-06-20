@@ -6,10 +6,11 @@ This plugin helps convert BRC plugin data into readable json.
 
 [SIZE=5][COLOR=#FF0000][B]Requirements:[/B][/COLOR][/SIZE]
 [LIST]
-[*][URL='https://www.spigotmc.org/resources/6515/']ShopGUIPlus[/URL] v1.59.0 or higher.
-[*][URL='https://www.spigotmc.org/resources/37707/']PlayerShopGUIPlus[/URL] v1.16.0 or higher.
-[*][URL='https://www.spigotmc.org/resources/83189/']SirBlobmanCore[/URL] v2.0.6-Dev or higher.
-[*]A fully functioning MySQL MariaDB database previously linked to PlayerShopGUIPlus.
+[*]Spigot 1.17 and Java 16
+[*][URL='https://www.spigotmc.org/resources/6515/']ShopGUIPlus[/URL] v1.61.0 or higher.
+[*][URL='https://www.spigotmc.org/resources/37707/']PlayerShopGUIPlus[/URL] v1.18.0 or higher.
+[*][URL='https://www.spigotmc.org/resources/83189/']SirBlobmanCore[/URL] v2.2.0 or higher.
+[*]A fully functioning MySQL database previously linked to PlayerShopGUIPlus.
 [/LIST]
 
 [SIZE=5][COLOR=#FF0000][B]Features:[/B][/COLOR][/SIZE]
@@ -39,7 +40,7 @@ Click the spoiler below to see the default configuration file.
 [SPOILER='Default Configuration File']
 [CODE=YAML]
 # DO NOT CHANGE THIS VALUE
-generated-by-version: "1.0.0-Beta"
+generated-by-version: "1.0.1"
 
 # Toggle option for debug mode. Only set this to true if requested by SirBlobman
 debug-mode: false
@@ -71,6 +72,7 @@ tables:
 
   # Log for when players buy items from the admin shop (ShopGUIPlus)
   sgp-transaction-history: "sgp_transaction_history"
+
 [/CODE]
 [/SPOILER]
 
