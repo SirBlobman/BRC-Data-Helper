@@ -16,5 +16,4 @@ depend:
   - "SirBlobmanCore"
 
 libraries:
-  - "org.mariadb.jdbc:mariadb-java-client:2.7.2"
-  - "com.zaxxer:HikariCP:4.0.3"
+  - "mysql:mysql-connector-java:8.0.25"

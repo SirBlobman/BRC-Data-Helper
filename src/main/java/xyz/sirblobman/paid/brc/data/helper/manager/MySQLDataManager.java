@@ -29,18 +29,19 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
+import com.mysql.cj.jdbc.MysqlDataSource;
 import net.brcdev.playershopgui.shop.ShopItem;
 import net.brcdev.playershopgui.shop.ShopItem.ShopItemState;
 import org.jetbrains.annotations.Nullable;
-import org.mariadb.jdbc.MariaDbPoolDataSource;
 
 public final class MySQLDataManager extends BukkitRunnable {
     private final DataHelperPlugin plugin;
-    private final MariaDbPoolDataSource dataSource;
+    private final MysqlDataSource dataSource;
 
     public MySQLDataManager(DataHelperPlugin plugin) {
         this.plugin = Validate.notNull(plugin, "plugin must not be null!");
-        this.dataSource = new MariaDbPoolDataSource();
+        this.dataSource =  new MysqlConnectionPoolDataSource();
     }
 
     public synchronized boolean connectToDatabase() {
@@ -60,14 +61,14 @@ public final class MySQLDataManager extends BukkitRunnable {
             this.dataSource.setDatabaseName(databaseName);
             this.dataSource.setUser(userName);
             this.dataSource.setPassword(userPass);
-            this.dataSource.initialize();
+            this.dataSource.setLoginTimeout(5);
 
             Connection connection = getConnection();
             DatabaseMetaData connectionMeta = connection.getMetaData();
             String driverName = connectionMeta.getDriverName();
             String driverVersion = connectionMeta.getDriverVersion();
             String driverFullName = String.format(Locale.US, "%s v%s", driverName, driverVersion);
-            logger.info("Successfully connected to MariaDB database with driver " + driverFullName + ".");
+            logger.info("Successfully connected to MySQL database with driver " + driverFullName + ".");
 
             logger.info("Checking database tables...");
             checkDatabaseTables(connection);

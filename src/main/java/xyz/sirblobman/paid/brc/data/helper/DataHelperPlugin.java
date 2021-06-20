@@ -30,6 +30,9 @@ public final class DataHelperPlugin extends ConfigurablePlugin {
 
     @Override
     public void onEnable() {
+        Logger logger = getLogger();
+        logger.info("Attempting to connect to database, please wait...");
+
         MySQLDataManager dataManager = getDataManager();
         if(!dataManager.connectToDatabase()) {
             setEnabled(false);
