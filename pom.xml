@@ -8,10 +8,11 @@
     
     <name>BRC Data Helper</name>
     <description>A plugin that helps out with databases from BRC plugins.</description>
+    <url>https://www.spigotmc.org/resources/91697/</url>
     
     <properties>
         <java.version>16</java.version>
-        <spigot.version>1.17-R0.1-SNAPSHOT</spigot.version>
+        <spigot.version>1.17.1-R0.1-SNAPSHOT</spigot.version>
         
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -22,7 +23,7 @@
         <bukkit.plugin.description>${project.description}</bukkit.plugin.description>
 
         <bukkit.plugin.main>xyz.sirblobman.paid.brc.data.helper.DataHelperPlugin</bukkit.plugin.main>
-        <bukkit.plugin.version>1.0.1</bukkit.plugin.version>
+        <bukkit.plugin.version>1.0.2</bukkit.plugin.version>
     </properties>
 
     <repositories>
@@ -58,7 +59,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.25</version>
+            <version>8.0.26</version>
             <scope>provided</scope>
         </dependency>
 
@@ -82,7 +83,7 @@
         <dependency>
             <groupId>net.brcdev</groupId>
             <artifactId>ShopGUIPlus</artifactId>
-            <version>1.61.0</version>
+            <version>1.63.0</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
