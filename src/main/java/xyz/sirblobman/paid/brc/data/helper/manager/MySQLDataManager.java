@@ -298,17 +298,21 @@ public final class MySQLDataManager extends BukkitRunnable {
         String originalTableName = configuration.getString("tables.psgp-original");
         String convertedTableName = configuration.getString("tables.psgp-converted");
 
-        String deleteCode = String.format(Locale.US, "DELETE FROM `%s` WHERE `id` NOT IN (SELECT `id` FROM `%s`);", convertedTableName, originalTableName);
+        String deleteCode = String.format(Locale.US,
+                "DELETE FROM `%s` WHERE `id` NOT IN (SELECT `id` FROM `%s` WHERE `shopItems` != '[]');",
+                convertedTableName, originalTableName);
         execute(connection, deleteCode);
 
         String selectAllCode = ("SELECT * FROM `%s` WHERE `shopItems` != '[]';");
-        String selectAll = String.format(Locale.US, selectAllCode, originalTableName, convertedTableName);
+        String selectAll = String.format(Locale.US, selectAllCode, originalTableName);
         Statement selectAllStatement = connection.createStatement();
         ResultSet selectAllResults = selectAllStatement.executeQuery(selectAll);
-
-        String insert = String.format(Locale.US, "INSERT INTO `%s` (`id`,`player_id`,`shop_name`,`shop_items`, " +
-                "`shop_items_count`) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `shop_name`=VALUES(`shop_name`), " +
-                "`shop_items`=VALUES(`shop_items`), `shop_items_count`=VALUES(`shop_items_count`);", convertedTableName);
+        
+        String insert = String.format(Locale.US, """
+                INSERT INTO `%s` (`id, `player_id`, `shop_name`, `shop_items`, `shop_items_count`) \
+                VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `shop_name`=VALUES(`shop_name`), \
+                `shop_items`=VALUES(`shop_items`), `shop_items_count`=VALUES(`shop_items_count`);""",
+                convertedTableName);
         PreparedStatement insertPrepared = connection.prepareStatement(insert);
 
         while(selectAllResults.next()) {
