@@ -23,7 +23,7 @@
         <bukkit.plugin.description>${project.description}</bukkit.plugin.description>
 
         <bukkit.plugin.main>xyz.sirblobman.paid.brc.data.helper.DataHelperPlugin</bukkit.plugin.main>
-        <bukkit.plugin.version>1.0.3</bukkit.plugin.version>
+        <bukkit.plugin.version>1.0.4</bukkit.plugin.version>
     </properties>
 
     <repositories>
@@ -75,15 +75,21 @@
         <dependency>
             <groupId>com.github.sirblobman.api</groupId>
             <artifactId>core</artifactId>
-            <version>2.2-SNAPSHOT</version>
+            <version>2.3-SNAPSHOT</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- ShopGUIPlus -->
         <dependency>
             <groupId>net.brcdev</groupId>
             <artifactId>ShopGUIPlus</artifactId>
-            <version>1.63.0</version>
+            <version>1.64.0</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -125,10 +131,24 @@
     <build>
         <defaultGoal>clean install</defaultGoal>
         <finalName>${bukkit.plugin.name}-${bukkit.plugin.version}</finalName>
+
         <resources>
+            <!-- Replace variables in YML files -->
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <includes>
+                    <include>*.yml</include>
+                </includes>
+            </resource>
+
+            <!-- Exclude YML files as they're included in the replacement -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>*.yml</exclude>
+                </excludes>
             </resource>
         </resources>
     </build>

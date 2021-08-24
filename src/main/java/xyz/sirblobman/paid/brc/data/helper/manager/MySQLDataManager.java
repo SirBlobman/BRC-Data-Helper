@@ -1,5 +1,9 @@
 package xyz.sirblobman.paid.brc.data.helper.manager;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -7,8 +11,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,7 +24,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.core.CorePlugin;
@@ -35,57 +41,15 @@ import net.brcdev.playershopgui.shop.ShopItem;
 import net.brcdev.playershopgui.shop.ShopItem.ShopItemState;
 import org.jetbrains.annotations.Nullable;
 
-public final class MySQLDataManager extends BukkitRunnable {
+public final class MySQLDataManager extends TimerTask {
     private final DataHelperPlugin plugin;
     private final MysqlDataSource dataSource;
+    private Timer timer;
 
     public MySQLDataManager(DataHelperPlugin plugin) {
         this.plugin = Validate.notNull(plugin, "plugin must not be null!");
         this.dataSource =  new MysqlConnectionPoolDataSource();
-    }
-
-    public synchronized boolean connectToDatabase() {
-        ConfigurationManager configurationManager = this.plugin.getConfigurationManager();
-        YamlConfiguration configuration = configurationManager.get("config.yml");
-
-        String hostName = configuration.getString("database.host");
-        int port = configuration.getInt("database.port");
-        String databaseName = configuration.getString("database.database");
-        String userName = configuration.getString("database.username");
-        String userPass = configuration.getString("database.password");
-
-        Logger logger = this.plugin.getLogger();
-        try {
-            this.dataSource.setServerName(hostName);
-            this.dataSource.setPortNumber(port);
-            this.dataSource.setDatabaseName(databaseName);
-            this.dataSource.setUser(userName);
-            this.dataSource.setPassword(userPass);
-            this.dataSource.setLoginTimeout(5);
-
-            Connection connection = getConnection();
-            DatabaseMetaData connectionMeta = connection.getMetaData();
-            String driverName = connectionMeta.getDriverName();
-            String driverVersion = connectionMeta.getDriverVersion();
-            String driverFullName = String.format(Locale.US, "%s v%s", driverName, driverVersion);
-            logger.info("Successfully connected to MySQL database with driver " + driverFullName + ".");
-
-            logger.info("Checking database tables...");
-            checkDatabaseTables(connection);
-            logger.info("Done.");
-
-            return true;
-        } catch (SQLException ex) {
-            logger.log(Level.WARNING,"Failed to setup the MySQL database connection because an error occurred:", ex);
-            return false;
-        }
-    }
-
-    public void register() {
-        ConfigurationManager configurationManager = this.plugin.getConfigurationManager();
-        YamlConfiguration configuration = configurationManager.get("config.yml");
-        long period = configuration.getLong("data-sync-period");
-        runTaskTimerAsynchronously(this.plugin, 1L, period);
+        this.timer = null;
     }
 
     @Override
@@ -99,6 +63,74 @@ public final class MySQLDataManager extends BukkitRunnable {
         } catch(SQLException ex) {
             logger.log(Level.WARNING, "An error occurred while syncing data to MySQL:", ex);
             logger.warning("Data synchronization failed.");
+        }
+    }
+    
+    @Override
+    public boolean cancel() {
+        boolean cancel = super.cancel();
+        
+        if(this.timer != null) {
+            this.timer.cancel();
+            this.timer = null;
+        }
+        
+        return cancel;
+    }
+    
+    public boolean isCancelled() {
+        return (this.timer == null);
+    }
+    
+    public void register() {
+        if(this.timer != null) {
+            cancel();
+        }
+        
+        ConfigurationManager configurationManager = this.plugin.getConfigurationManager();
+        YamlConfiguration configuration = configurationManager.get("config.yml");
+        long periodTicks = configuration.getLong("data-sync-period");
+        long periodMillis = (periodTicks * 50L);
+        
+        this.timer = new Timer("BRC Data Helper Synchronization");
+        this.timer.scheduleAtFixedRate(this,  50L, periodMillis);
+    }
+    
+    public synchronized boolean connectToDatabase() {
+        ConfigurationManager configurationManager = this.plugin.getConfigurationManager();
+        YamlConfiguration configuration = configurationManager.get("config.yml");
+        
+        String hostName = configuration.getString("database.host");
+        int port = configuration.getInt("database.port");
+        String databaseName = configuration.getString("database.database");
+        String userName = configuration.getString("database.username");
+        String userPass = configuration.getString("database.password");
+        
+        Logger logger = this.plugin.getLogger();
+        try {
+            this.dataSource.setServerName(hostName);
+            this.dataSource.setPortNumber(port);
+            this.dataSource.setDatabaseName(databaseName);
+            this.dataSource.setUser(userName);
+            this.dataSource.setPassword(userPass);
+            this.dataSource.setLoginTimeout(5);
+            
+            Connection connection = getConnection();
+            DatabaseMetaData connectionMeta = connection.getMetaData();
+            String driverName = connectionMeta.getDriverName();
+            String driverVersion = connectionMeta.getDriverVersion();
+            String driverFullName = String.format(Locale.US, "%s v%s", driverName, driverVersion);
+            logger.info("Successfully connected to MySQL database with driver " + driverFullName + ".");
+            
+            logger.info("Checking database tables...");
+            checkDatabaseTables(connection);
+            logger.info("Done.");
+            
+            connection.close();
+            return true;
+        } catch (SQLException ex) {
+            logger.log(Level.WARNING,"Failed to setup the MySQL database connection because an error occurred:", ex);
+            return false;
         }
     }
 
@@ -115,9 +147,8 @@ public final class MySQLDataManager extends BukkitRunnable {
         String itemJson = itemElement.toString();
 
         try (Connection connection = getConnection()) {
-            String sqlCode = String.format(Locale.US, "INSERT INTO `%s` (`buyer_id`, `shop_name`, " +
-                    "`shop_owner_id`, `price`, `amount`, `item_json`, `timestamp`) VALUES (?, ?, ?, ?, ?, ?, ?);", tableName);
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlCode);
+            String insertCode = getCommandFromSQL("insert_into_psgp_purchase_history", tableName);
+            PreparedStatement preparedStatement = connection.prepareStatement(insertCode);
 
             preparedStatement.setString(1, buyerId);
             preparedStatement.setString(2, shopName);
@@ -147,9 +178,8 @@ public final class MySQLDataManager extends BukkitRunnable {
         String itemJson = itemElement.toString();
 
         try (Connection connection = getConnection()) {
-            String sqlCode = String.format(Locale.US, "INSERT INTO `%s` (`player_id`, `shop_name`, " +
-                    "`price`, `amount`, `item_json`, `timestamp`) VALUES (?, ?, ?, ?, ?, ?);", tableName);
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlCode);
+            String insertCode = getCommandFromSQL("insert_into_psgp_creation", tableName);
+            PreparedStatement preparedStatement = connection.prepareStatement(insertCode);
 
             preparedStatement.setString(1, playerId);
             preparedStatement.setString(2, shopName);
@@ -178,9 +208,8 @@ public final class MySQLDataManager extends BukkitRunnable {
         String itemJson = itemElement.toString();
 
         try (Connection connection = getConnection()) {
-            String sqlCode = String.format(Locale.US, "INSERT INTO `%s` (`buyer_id`, `timestamp`, " +
-                    "`transaction_type`, `price`, `amount`, `item_json`) VALUES (?, ?, ?, ?, ?, ?);", tableName);
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlCode);
+            String insertCode = getCommandFromSQL("insert_into_sgp_transaction", tableName);
+            PreparedStatement preparedStatement = connection.prepareStatement(insertCode);
 
             preparedStatement.setString(1, playerId);
             preparedStatement.setTimestamp(2, new Timestamp(timestamp));
@@ -297,23 +326,21 @@ public final class MySQLDataManager extends BukkitRunnable {
         YamlConfiguration configuration = configurationManager.get("config.yml");
         String originalTableName = configuration.getString("tables.psgp-original");
         String convertedTableName = configuration.getString("tables.psgp-converted");
-
-        String deleteCode = String.format(Locale.US,
-                "DELETE FROM `%s` WHERE `id` NOT IN (SELECT `id` FROM `%s` WHERE `shopItems` != '[]');",
-                convertedTableName, originalTableName);
-        execute(connection, deleteCode);
-
-        String selectAllCode = ("SELECT * FROM `%s` WHERE `shopItems` != '[]';");
-        String selectAll = String.format(Locale.US, selectAllCode, originalTableName);
-        Statement selectAllStatement = connection.createStatement();
-        ResultSet selectAllResults = selectAllStatement.executeQuery(selectAll);
         
-        String insert = String.format(Locale.US, """
-                INSERT INTO `%s` (`id, `player_id`, `shop_name`, `shop_items`, `shop_items_count`) \
-                VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `shop_name`=VALUES(`shop_name`), \
-                `shop_items`=VALUES(`shop_items`), `shop_items_count`=VALUES(`shop_items_count`);""",
-                convertedTableName);
-        PreparedStatement insertPrepared = connection.prepareStatement(insert);
+        String selectIdNotEmptyCode = getCommandFromSQL("select_id_not_empty", originalTableName);
+        String deleteCode = getCommandFromSQL("delete_converted", convertedTableName)
+                .replace("{select_not_empty}", selectIdNotEmptyCode);
+    
+        printDebug("Select Not Empty: " + selectIdNotEmptyCode);
+        printDebug("Delete Converted: " + deleteCode);
+        execute(connection, deleteCode);
+    
+        String selectNotEmptyCode = getCommandFromSQL("select_not_empty", originalTableName);
+        Statement selectAllStatement = connection.createStatement();
+        ResultSet selectAllResults = selectAllStatement.executeQuery(selectNotEmptyCode);
+        
+        String insertCode = getCommandFromSQL("insert_into_converted", convertedTableName);
+        PreparedStatement insertPrepared = connection.prepareStatement(insertCode);
 
         while(selectAllResults.next()) {
             int id = selectAllResults.getInt("id");
@@ -378,5 +405,40 @@ public final class MySQLDataManager extends BukkitRunnable {
         String json = JavaPlugin.getPlugin(CorePlugin.class).getMultiVersionHandler().getItemHandler().toNBT(item);
         JsonParser jsonParser = new JsonParser();
         return jsonParser.parse(json);
+    }
+    
+    private String getCommandFromSQL(String commandName, Object... replacements) {
+        try {
+            String fileName = ("commands/" + commandName + ".sql");
+            InputStream jarFile = this.plugin.getResource(fileName);
+            if(jarFile == null) {
+                throw new IOException("'" + fileName + "' does not exist in the jar file.");
+            }
+    
+            InputStreamReader jarFileReader = new InputStreamReader(jarFile);
+            BufferedReader bufferedReader = new BufferedReader(jarFileReader);
+    
+            String currentLine;
+            List<String> lineList = new ArrayList<>();
+            while((currentLine = bufferedReader.readLine()) != null) {
+                lineList.add(currentLine);
+            }
+            
+            String sqlCode = String.join("\n", lineList);
+            return String.format(Locale.US, sqlCode, replacements);
+        } catch(IOException ex) {
+            Logger logger = this.plugin.getLogger();
+            logger.log(Level.WARNING, "An error occurred while getting an SQL command:", ex);
+            return "";
+        }
+    }
+    
+    private void printDebug(String message) {
+        ConfigurationManager configurationManager = this.plugin.getConfigurationManager();
+        YamlConfiguration configuration = configurationManager.get("config.yml");
+        if(!configuration.getBoolean("debug-mode", false)) return;
+        
+        Logger logger = this.plugin.getLogger();
+        logger.info("[Debug] " + message);
     }
 }

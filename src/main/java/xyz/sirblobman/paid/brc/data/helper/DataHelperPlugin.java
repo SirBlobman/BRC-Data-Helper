@@ -1,5 +1,7 @@
 package xyz.sirblobman.paid.brc.data.helper;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -34,19 +36,28 @@ public final class DataHelperPlugin extends ConfigurablePlugin {
         logger.info("Attempting to connect to database, please wait...");
 
         MySQLDataManager dataManager = getDataManager();
-        if(!dataManager.connectToDatabase()) {
-            setEnabled(false);
-            return;
-        }
-
-        showVersionInfo("PlayerShopGUIPlus");
-        showVersionInfo("ShopGUIPlus");
-        showVersionInfo("SirBlobmanCore");
-        dataManager.register();
-
-        new ListenerPlayerShopGUIPlus(this).register();
-        new ListenerShopGUIPlus(this).register();
-        this.enabledSuccessfully = true;
+        CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(dataManager::connectToDatabase);
+        future.whenComplete((success, error) -> {
+            if(error != null) {
+                logger.log(Level.WARNING, "An error occurred during the first MySQL Connection:", error);
+                success = false;
+            }
+            
+            if(!success) {
+                PluginManager pluginManager = Bukkit.getPluginManager();
+                pluginManager.disablePlugin(this);
+                return;
+            }
+            
+            showVersionInfo("PlayerShopGUIPlus");
+            showVersionInfo("ShopGUIPlus");
+            showVersionInfo("SirBlobmanCore");
+            dataManager.register();
+    
+            new ListenerPlayerShopGUIPlus(this).register();
+            new ListenerShopGUIPlus(this).register();
+            this.enabledSuccessfully = true;
+        });
     }
 
     @Override
