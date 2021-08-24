@@ -1,5 +1,5 @@
 # BRC Data Helper
-A plugin that helps out with databases from BRC plugins.
+A plugin that helps out with databases from BRC plugins.  
 *Please send me suggestions for new features or feature changes.*
 
 ## Requirements
