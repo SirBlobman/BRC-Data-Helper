@@ -351,7 +351,8 @@ public final class MySQLDataManager extends TimerTask {
             UUID playerId = getUUID(ownerUuid);
             if(playerId == null) continue;
 
-            net.brcdev.playershopgui.shop.ShopItem[] shopItemArray = net.brcdev.playershopgui.util.GsonUtils.getGson().fromJson(shopItemsJson, net.brcdev.playershopgui.shop.ShopItem[].class);
+            net.brcdev.playershopgui.shop.ShopItem[] shopItemArray = net.brcdev.playershopgui.util.GsonUtils
+                    .getGson().fromJson(shopItemsJson, net.brcdev.playershopgui.shop.ShopItem[].class);
             if(shopItemArray == null || shopItemArray.length == 0) continue;
 
             JsonArray jsonArray = new JsonArray();
@@ -373,7 +374,7 @@ public final class MySQLDataManager extends TimerTask {
                 jsonArray.add(jsonObject);
             }
             if(jsonArray.size() == 0) continue;
-
+            
             insertPrepared.setInt(1, id);
             insertPrepared.setString(2, playerId.toString());
             insertPrepared.setString(3, shopName);
