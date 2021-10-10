@@ -1,2 +1,2 @@
-INSERT INTO `%s` (`buyer_id`, `timestamp`, `transaction_type`, `price`, `amount`, `item_json`)
-    VALUES (?, ?, ?, ?, ?, ?);
+INSERT INTO `%s` (`buyer_id`, `timestamp`, `transaction_type`, `price`, `amount`, `item_json`, `shop-id`)
+    VALUES (?, ?, ?, ?, ?, ?, ?);

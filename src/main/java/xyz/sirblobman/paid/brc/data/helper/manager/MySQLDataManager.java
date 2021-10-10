@@ -196,7 +196,8 @@ public final class MySQLDataManager extends TimerTask {
         }
     }
 
-    public void postAdminTransaction(Player player, String shopAction, int amount, double price, ItemStack item, long timestamp) {
+    public void postAdminTransaction(Player player, String shopId, String shopAction, int amount, double price,
+                                     ItemStack item, long timestamp) {
         ConfigurationManager configurationManager = this.plugin.getConfigurationManager();
         YamlConfiguration configuration = configurationManager.get("config.yml");
         String tableName = configuration.getString("tables.sgp-transaction-history");
@@ -217,6 +218,7 @@ public final class MySQLDataManager extends TimerTask {
             preparedStatement.setDouble(4, price);
             preparedStatement.setInt(5, amount);
             preparedStatement.setString(6, itemJson);
+            preparedStatement.setString(7, shopId);
 
             preparedStatement.executeUpdate();
             preparedStatement.close();
@@ -240,10 +242,38 @@ public final class MySQLDataManager extends TimerTask {
         if(!results.next()) throw new SQLException("Original PSG+ table `" + originalTableName + "` does not exist!");
         results.close();
 
+        // Create any missing tables
         createConvertedTable(connection);
         createPurchaseHistoryTable(connection);
         createPlayerShopCreationHistoryTable(connection);
         createAdminShopTransactionTable(connection);
+        
+        // Fix missing column from admin shop table when its missing.
+        checkAdminShopTransactionTable(connection);
+    }
+    
+    private synchronized void checkAdminShopTransactionTable(Connection connection) throws SQLException {
+        ConfigurationManager configurationManager = this.plugin.getConfigurationManager();
+        YamlConfiguration configuration = configurationManager.get("config.yml");
+        String databaseName = configuration.getString("database.database");
+        String tableName = configuration.getString("tables.sgp-transaction-history");
+        
+        String sqlCommand = getCommandFromSQL("select_shop_column_in_sgp_transaction");
+        PreparedStatement statement = connection.prepareStatement(sqlCommand);
+        statement.setString(1, databaseName);
+        statement.setString(2, tableName);
+    
+        ResultSet results = statement.executeQuery();
+        if(!results.next() || results.getInt("COUNT(*)") == 0) {
+            String createCommand = getCommandFromSQL("create_shop_id_column_in_sgp_transaction",
+                    tableName);
+            Statement createStatement = connection.createStatement();
+            createStatement.execute(createCommand);
+            createStatement.close();
+        }
+        
+        results.close();
+        statement.close();
     }
 
     private synchronized void execute(Connection connection, String sql) throws SQLException {
@@ -314,7 +344,8 @@ public final class MySQLDataManager extends TimerTask {
                 "`transaction_type` VARCHAR(8) NOT NULL",
                 "`price` DOUBLE NOT NULL",
                 "`amount` INTEGER NOT NULL",
-                "`item_json` JSON NOT NULL"
+                "`item_json` JSON NOT NULL",
+                "`shop-id` VARCHAR(1024) NOT NULL DEFAULT 'N/A'"
         );
 
         String tableColumns = String.join(", ", columnList);

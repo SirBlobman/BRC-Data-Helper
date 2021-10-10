@@ -9,6 +9,7 @@ import xyz.sirblobman.paid.brc.data.helper.DataHelperPlugin;
 import xyz.sirblobman.paid.brc.data.helper.manager.MySQLDataManager;
 
 import net.brcdev.shopgui.event.ShopPostTransactionEvent;
+import net.brcdev.shopgui.shop.Shop;
 import net.brcdev.shopgui.shop.ShopItem;
 import net.brcdev.shopgui.shop.ShopManager.ItemType;
 import net.brcdev.shopgui.shop.ShopManager.ShopAction;
@@ -24,11 +25,15 @@ public final class ListenerShopGUIPlus extends DataListener {
     public void onTransaction(ShopPostTransactionEvent e) {
         ShopTransactionResult result = e.getResult();
         ShopTransactionResultType resultType = result.getResult();
-        if(resultType != ShopTransactionResultType.SUCCESS) return;
+        if(resultType != ShopTransactionResultType.SUCCESS) {
+            return;
+        }
 
         ShopItem shopItem = result.getShopItem();
         ItemType shopItemType = shopItem.getType();
-        if(shopItemType != ItemType.ITEM) return;
+        if(shopItemType != ItemType.ITEM) {
+            return;
+        }
 
         Player player = result.getPlayer();
         ShopAction shopAction = result.getShopAction();
@@ -37,11 +42,14 @@ public final class ListenerShopGUIPlus extends DataListener {
         int amount = result.getAmount();
         double price = result.getPrice();
         ItemStack item = shopItem.getItem();
-
+        
+        Shop shop = shopItem.getShop();
+        String shopId = (shop == null ? "N/A" : shop.getId());
         long timestamp = System.currentTimeMillis();
+        
         Runnable task = () -> {
             MySQLDataManager dataManager = getDataManager();
-            dataManager.postAdminTransaction(player, shopActionName, amount, price, item, timestamp);
+            dataManager.postAdminTransaction(player, shopId, shopActionName, amount, price, item, timestamp);
         };
         runAsync(task);
     }
