@@ -20,25 +20,25 @@ public final class ListenerShopGUIPlus extends DataListener {
     public ListenerShopGUIPlus(DataHelperPlugin plugin) {
         super(plugin);
     }
-
-    @EventHandler(priority=EventPriority.MONITOR, ignoreCancelled=true)
+    
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onTransaction(ShopPostTransactionEvent e) {
         ShopTransactionResult result = e.getResult();
         ShopTransactionResultType resultType = result.getResult();
         if(resultType != ShopTransactionResultType.SUCCESS) {
             return;
         }
-
+        
         ShopItem shopItem = result.getShopItem();
         ItemType shopItemType = shopItem.getType();
         if(shopItemType != ItemType.ITEM) {
             return;
         }
-
+        
         Player player = result.getPlayer();
         ShopAction shopAction = result.getShopAction();
         String shopActionName = shopAction.name();
-
+        
         int amount = result.getAmount();
         double price = result.getPrice();
         ItemStack item = shopItem.getItem();

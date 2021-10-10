@@ -18,23 +18,23 @@ import xyz.sirblobman.paid.brc.data.helper.manager.MySQLDataManager;
 public final class DataHelperPlugin extends ConfigurablePlugin {
     private final MySQLDataManager dataManager;
     private boolean enabledSuccessfully;
-
+    
     public DataHelperPlugin() {
         this.dataManager = new MySQLDataManager(this);
         this.enabledSuccessfully = false;
     }
-
+    
     @Override
     public void onLoad() {
         ConfigurationManager configurationManager = getConfigurationManager();
         configurationManager.saveDefault("config.yml");
     }
-
+    
     @Override
     public void onEnable() {
         Logger logger = getLogger();
         logger.info("Attempting to connect to database, please wait...");
-
+        
         MySQLDataManager dataManager = getDataManager();
         CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(dataManager::connectToDatabase);
         future.whenComplete((success, error) -> {
@@ -53,38 +53,38 @@ public final class DataHelperPlugin extends ConfigurablePlugin {
             showVersionInfo("ShopGUIPlus");
             showVersionInfo("SirBlobmanCore");
             dataManager.register();
-    
+            
             new ListenerPlayerShopGUIPlus(this).register();
             new ListenerShopGUIPlus(this).register();
             this.enabledSuccessfully = true;
         });
     }
-
+    
     @Override
     public void onDisable() {
         if(!this.enabledSuccessfully) {
             return;
         }
-
+        
         if(!this.dataManager.isCancelled()) {
             this.dataManager.cancel();
         }
-
+        
         this.enabledSuccessfully = false;
     }
-
+    
     public MySQLDataManager getDataManager() {
         return this.dataManager;
     }
-
+    
     private void showVersionInfo(String pluginName) {
         PluginManager pluginManager = Bukkit.getPluginManager();
         Plugin plugin = pluginManager.getPlugin(pluginName);
         if(plugin == null) return;
-
+        
         PluginDescriptionFile pluginDescription = plugin.getDescription();
         String pluginFullName = pluginDescription.getFullName();
-
+        
         Logger logger = getLogger();
         logger.info("Found a dependency: " + pluginFullName + "");
     }

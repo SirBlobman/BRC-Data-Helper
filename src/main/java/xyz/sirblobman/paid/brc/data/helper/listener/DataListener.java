@@ -11,12 +11,12 @@ abstract class DataListener extends PluginListener<DataHelperPlugin> {
     DataListener(DataHelperPlugin plugin) {
         super(plugin);
     }
-
+    
     protected final MySQLDataManager getDataManager() {
         DataHelperPlugin plugin = getPlugin();
         return plugin.getDataManager();
     }
-
+    
     protected final void runAsync(Runnable task) {
         DataHelperPlugin plugin = getPlugin();
         BukkitScheduler scheduler = Bukkit.getScheduler();
