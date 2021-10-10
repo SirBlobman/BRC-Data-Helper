@@ -1,12 +1,12 @@
-package xyz.sirblobman.paid.brc.data.helper.listener;
+package com.github.sirblobman.paid.brc.data.helper.listener;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 
-import xyz.sirblobman.paid.brc.data.helper.DataHelperPlugin;
-import xyz.sirblobman.paid.brc.data.helper.manager.MySQLDataManager;
+import com.github.sirblobman.paid.brc.data.helper.DataHelperPlugin;
+import com.github.sirblobman.paid.brc.data.helper.manager.MySQLDataManager;
 
 import net.brcdev.shopgui.event.ShopPostTransactionEvent;
 import net.brcdev.shopgui.shop.Shop;

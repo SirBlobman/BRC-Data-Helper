@@ -1,4 +1,4 @@
-package xyz.sirblobman.paid.brc.data.helper;
+package com.github.sirblobman.paid.brc.data.helper;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
@@ -11,9 +11,9 @@ import org.bukkit.plugin.PluginManager;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.plugin.ConfigurablePlugin;
-import xyz.sirblobman.paid.brc.data.helper.listener.ListenerPlayerShopGUIPlus;
-import xyz.sirblobman.paid.brc.data.helper.listener.ListenerShopGUIPlus;
-import xyz.sirblobman.paid.brc.data.helper.manager.MySQLDataManager;
+import com.github.sirblobman.paid.brc.data.helper.listener.ListenerPlayerShopGUIPlus;
+import com.github.sirblobman.paid.brc.data.helper.manager.MySQLDataManager;
+import com.github.sirblobman.paid.brc.data.helper.listener.ListenerShopGUIPlus;
 
 public final class DataHelperPlugin extends ConfigurablePlugin {
     private final MySQLDataManager dataManager;

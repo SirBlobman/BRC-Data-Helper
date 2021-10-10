@@ -22,8 +22,8 @@
         <bukkit.plugin.prefix>${project.name}</bukkit.plugin.prefix>
         <bukkit.plugin.description>${project.description}</bukkit.plugin.description>
 
-        <bukkit.plugin.main>xyz.sirblobman.paid.brc.data.helper.DataHelperPlugin</bukkit.plugin.main>
-        <bukkit.plugin.version>1.0.6</bukkit.plugin.version>
+        <bukkit.plugin.main>com.github.sirblobman.paid.brc.data.helper.DataHelperPlugin</bukkit.plugin.main>
+        <bukkit.plugin.version>1.1.0</bukkit.plugin.version>
     </properties>
 
     <repositories>

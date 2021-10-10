@@ -1,4 +1,4 @@
-package xyz.sirblobman.paid.brc.data.helper.manager;
+package com.github.sirblobman.paid.brc.data.helper.manager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,7 +29,7 @@ import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.core.CorePlugin;
 import com.github.sirblobman.api.utility.ItemUtility;
 import com.github.sirblobman.api.utility.Validate;
-import xyz.sirblobman.paid.brc.data.helper.DataHelperPlugin;
+import com.github.sirblobman.paid.brc.data.helper.DataHelperPlugin;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

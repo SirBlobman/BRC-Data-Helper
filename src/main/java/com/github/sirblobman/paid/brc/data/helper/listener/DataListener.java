@@ -1,11 +1,11 @@
-package xyz.sirblobman.paid.brc.data.helper.listener;
+package com.github.sirblobman.paid.brc.data.helper.listener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.github.sirblobman.api.core.listener.PluginListener;
-import xyz.sirblobman.paid.brc.data.helper.DataHelperPlugin;
-import xyz.sirblobman.paid.brc.data.helper.manager.MySQLDataManager;
+import com.github.sirblobman.paid.brc.data.helper.DataHelperPlugin;
+import com.github.sirblobman.paid.brc.data.helper.manager.MySQLDataManager;
 
 abstract class DataListener extends PluginListener<DataHelperPlugin> {
     DataListener(DataHelperPlugin plugin) {

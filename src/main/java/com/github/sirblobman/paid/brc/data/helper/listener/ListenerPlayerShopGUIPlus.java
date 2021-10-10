@@ -1,4 +1,4 @@
-package xyz.sirblobman.paid.brc.data.helper.listener;
+package com.github.sirblobman.paid.brc.data.helper.listener;
 
 import java.util.UUID;
 
@@ -7,8 +7,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 
-import xyz.sirblobman.paid.brc.data.helper.DataHelperPlugin;
-import xyz.sirblobman.paid.brc.data.helper.manager.MySQLDataManager;
+import com.github.sirblobman.paid.brc.data.helper.DataHelperPlugin;
+import com.github.sirblobman.paid.brc.data.helper.manager.MySQLDataManager;
 
 import net.brcdev.playershopgui.event.CreateItemLotEvent;
 import net.brcdev.playershopgui.event.PurchaseItemLotEvent;
