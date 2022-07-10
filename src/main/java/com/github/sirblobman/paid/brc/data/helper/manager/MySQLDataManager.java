@@ -54,13 +54,13 @@ public final class MySQLDataManager extends TimerTask {
     
     @Override
     public void run() {
-        Logger logger = this.plugin.getLogger();
-        logger.info("Data synchronization triggered...");
+        printDebug("Data synchronization triggered...");
         
         try(Connection connection = getConnection()) {
             convertPSGPTable(connection);
-            logger.info("Data synchronization completed.");
+            printDebug("Data synchronization completed.");
         } catch(SQLException ex) {
+            Logger logger = this.plugin.getLogger();
             logger.log(Level.WARNING, "An error occurred while syncing data to MySQL:", ex);
             logger.warning("Data synchronization failed.");
         }
@@ -120,11 +120,11 @@ public final class MySQLDataManager extends TimerTask {
             String driverName = connectionMeta.getDriverName();
             String driverVersion = connectionMeta.getDriverVersion();
             String driverFullName = String.format(Locale.US, "%s v%s", driverName, driverVersion);
-            logger.info("Successfully connected to MySQL database with driver " + driverFullName + ".");
+            printDebug("Successfully connected to MySQL database with driver " + driverFullName + ".");
             
-            logger.info("Checking database tables...");
+            printDebug("Checking database tables...");
             checkDatabaseTables(connection);
-            logger.info("Done.");
+            printDebug("Done.");
             
             connection.close();
             return true;
@@ -140,7 +140,9 @@ public final class MySQLDataManager extends TimerTask {
         String tableName = configuration.getString("tables.psgp-purchase-history");
         
         JsonElement itemElement = toJSON(item);
-        if(itemElement == null) return;
+        if(itemElement == null) {
+            return;
+        }
         
         String buyerId = player.getUniqueId().toString();
         String shopOwnerId = shopOwner.toString();
@@ -172,7 +174,9 @@ public final class MySQLDataManager extends TimerTask {
         String tableName = configuration.getString("tables.psgp-creation");
         
         JsonElement itemElement = toJSON(item);
-        if(itemElement == null) return;
+        if(itemElement == null) {
+            return;
+        }
         
         String playerId = player.getUniqueId().toString();
         String itemJson = itemElement.toString();
@@ -203,7 +207,9 @@ public final class MySQLDataManager extends TimerTask {
         String tableName = configuration.getString("tables.sgp-transaction-history");
         
         JsonElement itemElement = toJSON(item);
-        if(itemElement == null) return;
+        if(itemElement == null) {
+            return;
+        }
         
         String playerId = player.getUniqueId().toString();
         String itemJson = itemElement.toString();
@@ -239,7 +245,10 @@ public final class MySQLDataManager extends TimerTask {
         
         DatabaseMetaData connectionMeta = connection.getMetaData();
         ResultSet results = connectionMeta.getTables(null, null, originalTableName, null);
-        if(!results.next()) throw new SQLException("Original PSG+ table `" + originalTableName + "` does not exist!");
+        if(!results.next()) {
+            throw new SQLException("Original PSG+ table `" + originalTableName + "` does not exist!");
+        }
+
         results.close();
         
         // Create any missing tables
@@ -248,7 +257,7 @@ public final class MySQLDataManager extends TimerTask {
         createPlayerShopCreationHistoryTable(connection);
         createAdminShopTransactionTable(connection);
         
-        // Fix missing column from admin shop table when its missing.
+        // Fix missing column from admin shop table when it's missing.
         checkAdminShopTransactionTable(connection);
     }
     
@@ -380,23 +389,33 @@ public final class MySQLDataManager extends TimerTask {
             String shopItemsJson = selectAllResults.getString("shopItems");
             
             UUID playerId = getUUID(ownerUuid);
-            if(playerId == null) continue;
+            if(playerId == null) {
+                continue;
+            }
             
             net.brcdev.playershopgui.shop.ShopItem[] shopItemArray = net.brcdev.playershopgui.util.GsonUtils
                     .getGson().fromJson(shopItemsJson, net.brcdev.playershopgui.shop.ShopItem[].class);
-            if(shopItemArray == null || shopItemArray.length == 0) continue;
+            if(shopItemArray == null || shopItemArray.length == 0) {
+                continue;
+            }
             
             JsonArray jsonArray = new JsonArray();
             for(ShopItem shopItem : shopItemArray) {
                 ShopItemState state = shopItem.getState();
-                if(state == ShopItemState.CANCELLED || state == ShopItemState.EXPIRED) continue;
+                if(state == ShopItemState.CANCELLED || state == ShopItemState.EXPIRED) {
+                    continue;
+                }
                 
                 long endTimestamp = shopItem.getEndTimestamp();
-                if(endTimestamp <= System.currentTimeMillis()) continue;
+                if(endTimestamp <= System.currentTimeMillis()) {
+                    continue;
+                }
                 
                 ItemStack item = shopItem.getItemStack();
                 JsonElement jsonElement = toJSON(item);
-                if(jsonElement == null) continue;
+                if(jsonElement == null) {
+                    continue;
+                }
                 
                 double price = shopItem.getPrice();
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
@@ -404,7 +423,10 @@ public final class MySQLDataManager extends TimerTask {
                 jsonObject.addProperty("end-timestamp", endTimestamp);
                 jsonArray.add(jsonObject);
             }
-            if(jsonArray.size() == 0) continue;
+
+            if(jsonArray.size() == 0) {
+                continue;
+            }
             
             insertPrepared.setInt(1, id);
             insertPrepared.setString(2, playerId.toString());
@@ -432,11 +454,12 @@ public final class MySQLDataManager extends TimerTask {
     
     @Nullable
     private JsonElement toJSON(ItemStack item) {
-        if(ItemUtility.isAir(item)) return null;
+        if(ItemUtility.isAir(item)) {
+            return null;
+        }
         
         String json = JavaPlugin.getPlugin(CorePlugin.class).getMultiVersionHandler().getItemHandler().toNBT(item);
-        JsonParser jsonParser = new JsonParser();
-        return jsonParser.parse(json);
+        return JsonParser.parseString(json);
     }
     
     private String getCommandFromSQL(String commandName, Object... replacements) {
@@ -468,7 +491,9 @@ public final class MySQLDataManager extends TimerTask {
     private void printDebug(String message) {
         ConfigurationManager configurationManager = this.plugin.getConfigurationManager();
         YamlConfiguration configuration = configurationManager.get("config.yml");
-        if(!configuration.getBoolean("debug-mode", false)) return;
+        if(!configuration.getBoolean("debug-mode", false)) {
+            return;
+        }
         
         Logger logger = this.plugin.getLogger();
         logger.info("[Debug] " + message);

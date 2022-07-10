@@ -3,7 +3,7 @@ package com.github.sirblobman.paid.brc.data.helper.listener;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import com.github.sirblobman.api.core.listener.PluginListener;
+import com.github.sirblobman.api.plugin.listener.PluginListener;
 import com.github.sirblobman.paid.brc.data.helper.DataHelperPlugin;
 import com.github.sirblobman.paid.brc.data.helper.manager.MySQLDataManager;
 

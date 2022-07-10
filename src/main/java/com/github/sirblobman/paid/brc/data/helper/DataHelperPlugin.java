@@ -80,7 +80,9 @@ public final class DataHelperPlugin extends ConfigurablePlugin {
     private void showVersionInfo(String pluginName) {
         PluginManager pluginManager = Bukkit.getPluginManager();
         Plugin plugin = pluginManager.getPlugin(pluginName);
-        if(plugin == null) return;
+        if(plugin == null) {
+            return;
+        }
         
         PluginDescriptionFile pluginDescription = plugin.getDescription();
         String pluginFullName = pluginDescription.getFullName();

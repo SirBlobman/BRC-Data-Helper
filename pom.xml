@@ -1,4 +1,6 @@
-<project>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
@@ -11,8 +13,8 @@
     <url>https://www.spigotmc.org/resources/91697/</url>
 
     <properties>
-        <java.version>16</java.version>
-        <spigot.version>1.17.1-R0.1-SNAPSHOT</spigot.version>
+        <java.version>17</java.version>
+        <spigot.version>1.19-R0.1-SNAPSHOT</spigot.version>
 
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -45,7 +47,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>22.0.0</version>
+            <version>23.0.0</version>
             <scope>provided</scope>
         </dependency>
 
@@ -53,7 +55,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.26</version>
+            <version>8.0.29</version>
             <scope>provided</scope>
         </dependency>
 
@@ -69,42 +71,24 @@
         <dependency>
             <groupId>com.github.sirblobman.api</groupId>
             <artifactId>core</artifactId>
-            <version>2.3-SNAPSHOT</version>
+            <version>2.4-SNAPSHOT</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- ShopGUIPlus -->
         <dependency>
             <groupId>net.brcdev</groupId>
             <artifactId>ShopGUIPlus</artifactId>
-            <version>1.67.3</version>
+            <version>1.77.4</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- PlayerShopGUIPlus -->
         <dependency>
             <groupId>net.brcdev</groupId>
             <artifactId>PlayerShopGUIPlus</artifactId>
-            <version>1.19.1</version>
+            <version>1.26.2</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
 
@@ -123,8 +107,8 @@
     </distributionManagement>
 
     <build>
-        <defaultGoal>clean install</defaultGoal>
         <finalName>${bukkit.plugin.name}-${bukkit.plugin.version}</finalName>
+        <defaultGoal>clean package</defaultGoal>
 
         <resources>
             <!-- Replace variables in YML files -->
