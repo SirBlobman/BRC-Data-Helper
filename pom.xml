@@ -25,7 +25,7 @@
         <bukkit.plugin.description>${project.description}</bukkit.plugin.description>
 
         <bukkit.plugin.main>com.github.sirblobman.paid.brc.data.helper.DataHelperPlugin</bukkit.plugin.main>
-        <bukkit.plugin.version>1.1.0</bukkit.plugin.version>
+        <bukkit.plugin.version>1.1.1</bukkit.plugin.version>
     </properties>
 
     <repositories>
@@ -79,7 +79,7 @@
         <dependency>
             <groupId>net.brcdev</groupId>
             <artifactId>ShopGUIPlus</artifactId>
-            <version>1.77.4</version>
+            <version>1.78.0</version>
             <scope>provided</scope>
         </dependency>
 
@@ -87,7 +87,7 @@
         <dependency>
             <groupId>net.brcdev</groupId>
             <artifactId>PlayerShopGUIPlus</artifactId>
-            <version>1.26.2</version>
+            <version>1.26.3</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

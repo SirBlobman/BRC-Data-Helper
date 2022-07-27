@@ -10,11 +10,11 @@ import com.github.sirblobman.paid.brc.data.helper.manager.MySQLDataManager;
 
 import net.brcdev.shopgui.event.ShopPostTransactionEvent;
 import net.brcdev.shopgui.shop.Shop;
-import net.brcdev.shopgui.shop.ShopItem;
-import net.brcdev.shopgui.shop.ShopManager.ItemType;
 import net.brcdev.shopgui.shop.ShopManager.ShopAction;
 import net.brcdev.shopgui.shop.ShopTransactionResult;
 import net.brcdev.shopgui.shop.ShopTransactionResult.ShopTransactionResultType;
+import net.brcdev.shopgui.shop.item.ShopItem;
+import net.brcdev.shopgui.shop.item.ShopItemType;
 
 public final class ListenerShopGUIPlus extends DataListener {
     public ListenerShopGUIPlus(DataHelperPlugin plugin) {
@@ -30,8 +30,8 @@ public final class ListenerShopGUIPlus extends DataListener {
         }
         
         ShopItem shopItem = result.getShopItem();
-        ItemType shopItemType = shopItem.getType();
-        if(shopItemType != ItemType.ITEM) {
+        ShopItemType shopItemType = shopItem.getType();
+        if(shopItemType != ShopItemType.ITEM) {
             return;
         }
         
