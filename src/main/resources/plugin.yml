@@ -11,9 +11,9 @@ authors:
   - "SirBlobman"
 
 depend:
+  - "BlueSlimeCore"
   - "PlayerShopGUIPlus"
   - "ShopGUIPlus"
-  - "SirBlobmanCore"
 
 libraries:
-  - "mysql:mysql-connector-java:8.0.29"
+  - "mysql:mysql-connector-java:8.0.30"
