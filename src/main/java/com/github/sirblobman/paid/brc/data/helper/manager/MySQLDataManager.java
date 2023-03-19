@@ -27,6 +27,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.core.CorePlugin;
+import com.github.sirblobman.api.nms.ItemHandler;
+import com.github.sirblobman.api.nms.MultiVersionHandler;
 import com.github.sirblobman.api.utility.ItemUtility;
 import com.github.sirblobman.api.utility.Validate;
 import com.github.sirblobman.paid.brc.data.helper.DataHelperPlugin;
@@ -457,9 +459,15 @@ public final class MySQLDataManager extends TimerTask {
         if(ItemUtility.isAir(item)) {
             return null;
         }
-        
-        String json = JavaPlugin.getPlugin(CorePlugin.class).getMultiVersionHandler().getItemHandler().toNBT(item);
-        return JsonParser.parseString(json);
+
+
+        CorePlugin corePlugin = JavaPlugin.getPlugin(CorePlugin.class);
+        MultiVersionHandler multiVersionHandler = corePlugin.getMultiVersionHandler();
+        ItemHandler itemHandler = multiVersionHandler.getItemHandler();
+        String json = itemHandler.toNBT(item);
+
+        JsonParser jsonParser = new JsonParser();
+        return jsonParser.parse(json);
     }
     
     private String getCommandFromSQL(String commandName, Object... replacements) {
