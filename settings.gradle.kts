@@ -1,1 +1,1 @@
-rootProject.name = "Block Compressor"
+rootProject.name = "BRC Data Helper"
