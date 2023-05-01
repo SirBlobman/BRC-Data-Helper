@@ -35,7 +35,7 @@ dependencies {
     compileOnly("com.mysql:mysql-connector-j:8.0.32") // MySQL Connector
 
     // Plugin Dependencies
-    compileOnly("com.github.sirblobman.api:core:2.7-SNAPSHOT") // BlueSlimeCore
+    compileOnly("com.github.sirblobman.api:core:2.9-SNAPSHOT") // BlueSlimeCore
     compileOnly("net.brcdev:PlayerShopGUIPlus:1.28.0") // PlayerShopGUIPlus
 
     // ShopGUIPlus API
