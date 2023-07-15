@@ -467,10 +467,9 @@ public final class MySQLDataManager extends TimerTask {
         CorePlugin corePlugin = JavaPlugin.getPlugin(CorePlugin.class);
         MultiVersionHandler multiVersionHandler = corePlugin.getMultiVersionHandler();
         ItemHandler itemHandler = multiVersionHandler.getItemHandler();
-        String json = itemHandler.toNBT(item);
 
-        JsonParser jsonParser = new JsonParser();
-        return jsonParser.parse(json);
+        String json = itemHandler.toNBT(item);
+        return JsonParser.parseString(json);
     }
 
     private @NotNull String getCommandFromSQL(@NotNull String commandName, Object @NotNull ... replacements) {
