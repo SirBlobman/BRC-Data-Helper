@@ -47,7 +47,6 @@ repositories {
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
     maven("https://nexus.sirblobman.xyz/public/")
     maven("https://nexus.sirblobman.xyz/proxy-jitpack/")
-
     maven("https://nexus.sirblobman.xyz/private/") {
         credentials {
             username = mavenUsername
@@ -59,16 +58,16 @@ repositories {
 dependencies {
     // Java Dependencies
     compileOnly("org.jetbrains:annotations:24.0.1") // JetBrains Annotations
-    compileOnly("org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT") // Spigot API
+    compileOnly("org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT") // Spigot API
     compileOnly("com.mysql:mysql-connector-j:8.0.33") // MySQL Connector
 
     // Plugin Dependencies
     compileOnly("com.github.sirblobman.api:core:2.9-SNAPSHOT") // BlueSlimeCore
-    compileOnly("net.brcdev:PlayerShopGUIPlus:1.28.0") // PlayerShopGUIPlus
+    compileOnly("net.brcdev:PlayerShopGUIPlus:1.29.0") // PlayerShopGUIPlus
 
     // ShopGUIPlus API
     compileOnly("com.github.brcdev-minecraft:shopgui-api:3.0.0") {
-        exclude("org.spigotmc", "spigot-api")
+        exclude("*", "*")
     }
 }
 
