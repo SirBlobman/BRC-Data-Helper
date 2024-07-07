@@ -5,12 +5,12 @@ A plugin that helps out with databases from BRC plugins.
 
 ## Requirements
 
-- Java 17
+- Java 21
 - A MySQL database previously linked to PlayerShopGUIPlus.
-- [Spigot](https://spigotmc.org/) or [Paper](https://papermc.io/download/paper) 1.19.4
-- [ShopGUIPlus](https://www.spigotmc.org/resources/6515/) 1.78.0 or higher.
-- [PlayerShopGUIPlus](https://www.spigotmc.org/resources/37707/) 1.28.0 or higher.
-- [BlueSlimeCore](https://www.spigotmc.org/resources/83189/) 2.9.0 or higher.
+- [Spigot](https://spigotmc.org/) or [Paper](https://papermc.io/download/paper) 1.21
+- [ShopGUIPlus](https://www.spigotmc.org/resources/6515/) 1.97.1 or higher.
+- [PlayerShopGUIPlus](https://www.spigotmc.org/resources/37707/) 1.33.1 or higher.
+- [BlueSlimeCore](https://www.spigotmc.org/resources/83189/) 2.9.6 or higher.
 
 ## Features
 

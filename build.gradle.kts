@@ -36,9 +36,9 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 repositories {
@@ -57,13 +57,13 @@ repositories {
 
 dependencies {
     // Java Dependencies
-    compileOnly("org.jetbrains:annotations:24.0.1") // JetBrains Annotations
-    compileOnly("org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT") // Spigot API
-    compileOnly("com.mysql:mysql-connector-j:8.0.33") // MySQL Connector
+    compileOnly("org.jetbrains:annotations:24.1.0") // JetBrains Annotations
+    compileOnly("org.spigotmc:spigot-api:1.21-R0.1-SNAPSHOT") // Spigot API
+    compileOnly("com.mysql:mysql-connector-j:9.0.0") // MySQL Connector
 
     // Plugin Dependencies
     compileOnly("com.github.sirblobman.api:core:2.9-SNAPSHOT") // BlueSlimeCore
-    compileOnly("net.brcdev:PlayerShopGUIPlus:1.29.0") // PlayerShopGUIPlus
+    compileOnly("net.brcdev:PlayerShopGUIPlus:1.33.1") // PlayerShopGUIPlus
 
     // ShopGUIPlus API
     compileOnly("com.github.brcdev-minecraft:shopgui-api:3.0.0") {

@@ -5,9 +5,7 @@ website: "${pluginWebsite}"
 
 main: "${pluginMainClass}"
 version: "${pluginVersion}"
-api-version: "1.19"
-
-folia-supported: true
+api-version: "1.21"
 
 authors:
   - "SirBlobman"
@@ -18,4 +16,4 @@ depend:
   - "ShopGUIPlus"
 
 libraries:
-  - "com.mysql:mysql-connector-j:8.0.33"
+  - "com.mysql:mysql-connector-j:9.0.0"

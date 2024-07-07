@@ -431,7 +431,7 @@ public final class MySQLDataManager extends TimerTask {
                 jsonArray.add(jsonObject);
             }
 
-            if (jsonArray.size() == 0) {
+            if (jsonArray.isEmpty()) {
                 continue;
             }
 
@@ -476,18 +476,7 @@ public final class MySQLDataManager extends TimerTask {
         try {
             String fileName = ("commands/" + commandName + ".sql");
             InputStream jarFile = this.plugin.getResource(fileName);
-            if (jarFile == null) {
-                throw new IOException("'" + fileName + "' does not exist in the jar file.");
-            }
-
-            InputStreamReader jarFileReader = new InputStreamReader(jarFile);
-            BufferedReader bufferedReader = new BufferedReader(jarFileReader);
-
-            String currentLine;
-            List<String> lineList = new ArrayList<>();
-            while ((currentLine = bufferedReader.readLine()) != null) {
-                lineList.add(currentLine);
-            }
+            List<String> lineList = readScript(jarFile, fileName);
 
             String sqlCode = String.join("\n", lineList);
             return String.format(Locale.US, sqlCode, replacements);
@@ -496,6 +485,23 @@ public final class MySQLDataManager extends TimerTask {
             logger.log(Level.WARNING, "An error occurred while getting an SQL command:", ex);
             return "";
         }
+    }
+
+    private @NotNull List<String> readScript(@Nullable InputStream stream, @NotNull String file) throws IOException {
+        if (stream == null) {
+            throw new IOException("'" + file + "' does not exist in the jar file.");
+        }
+
+        InputStreamReader streamReader = new InputStreamReader(stream);
+        BufferedReader bufferedReader = new BufferedReader(streamReader);
+
+        String currentLine;
+        List<String> lineList = new ArrayList<>();
+        while ((currentLine = bufferedReader.readLine()) != null) {
+            lineList.add(currentLine);
+        }
+
+        return lineList;
     }
 
     private void printDebug(@NotNull String message) {
