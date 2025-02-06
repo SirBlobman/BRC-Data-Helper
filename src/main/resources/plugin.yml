@@ -16,4 +16,4 @@ depend:
   - "ShopGUIPlus"
 
 libraries:
-  - "com.mysql:mysql-connector-j:9.0.0"
+  - "com.mysql:mysql-connector-j:9.2.0"
