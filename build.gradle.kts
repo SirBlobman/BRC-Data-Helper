@@ -58,12 +58,12 @@ repositories {
 dependencies {
     // Java Dependencies
     compileOnly("org.jetbrains:annotations:26.0.2") // JetBrains Annotations
-    compileOnly("org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT") // Spigot API
-    compileOnly("com.mysql:mysql-connector-j:9.2.0") // MySQL Connector
+    compileOnly("org.spigotmc:spigot-api:1.21.7-R0.1-SNAPSHOT") // Spigot API
+    compileOnly("com.mysql:mysql-connector-j:9.3.0") // MySQL Connector
 
     // Plugin Dependencies
     compileOnly("com.github.sirblobman.api:core:2.9-SNAPSHOT") // BlueSlimeCore
-    compileOnly("net.brcdev:PlayerShopGUIPlus:1.37.1") // PlayerShopGUIPlus
+    compileOnly("net.brcdev:PlayerShopGUIPlus:1.39.0") // PlayerShopGUIPlus
 
     // ShopGUIPlus API
     compileOnly("com.github.brcdev-minecraft:shopgui-api:3.0.0") {
