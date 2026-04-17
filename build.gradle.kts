@@ -58,7 +58,7 @@ repositories {
 dependencies {
     // Java Dependencies
     compileOnly("org.jetbrains:annotations:26.0.2") // JetBrains Annotations
-    compileOnly("org.spigotmc:spigot-api:1.21.7-R0.1-SNAPSHOT") // Spigot API
+    compileOnly("org.spigotmc:spigot-api:26.1.2-R0.1-SNAPSHOT") // Spigot API
     compileOnly("com.mysql:mysql-connector-j:9.3.0") // MySQL Connector
 
     // Plugin Dependencies
